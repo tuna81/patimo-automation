@@ -21,6 +21,7 @@ public class PatimoSteps {
         homePage = new HomePage(DriverFactory.getDriver());
         homePage.navigateToHomePage();
         homePage.acceptCookiesIfPresent();
+        homePage.closeNewsletterPopupIfPresent();
     }
 
     @When("kullanici Urunler sayfasina gider")
