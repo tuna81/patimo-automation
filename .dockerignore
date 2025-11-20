@@ -1,0 +1,9 @@
+# Maven build outputs
+/target
+
+# IDE metadata
+/.idea
+/.vscode
+
+# OS clutter
+.DS_Store
