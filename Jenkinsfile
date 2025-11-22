@@ -2,13 +2,14 @@ pipeline {
   agent any
 
   parameters {
-        string(name: 'TAG_EXPRESSION', defaultValue: 'not @ignore', description: 'Cucumber tag filtre ifadesi (örn: @smoke, @regression)')
-    }
+    // Varsayılan olarak hepsini koşsun ama istersek değiştirelim
+    string(name: 'TAG_EXPRESSION', defaultValue: 'not @ignore', description: 'Hangi tagleri koşmak istersin? Örn: @smoke, @cart')
+  }
 
   triggers {
-        // Her 2 dakikada bir GitHub'ı kontrol et
-        pollSCM('H/2 * * * *') 
-    }
+    // Her 2 dakikada bir GitHub'ı kontrol et
+    pollSCM('H/2 * * * *') 
+  }
 
   stages {
     stage('Checkout') {
@@ -25,8 +26,14 @@ pipeline {
 
     stage('Run Tests') {
       steps {
-        // -v $WORKSPACE/target:/app/target ile raporları Jenkins tarafına kopyalıyoruz
-        sh 'docker run --rm --shm-size=2g -v $WORKSPACE/target:/app/target -e CUCUMBER_FILTER_TAGS="${params.TAG_EXPRESSION}" patimo-automation'
+        script {
+            // Parametreyi değişkene alıyoruz
+            def tags = params.TAG_EXPRESSION
+            
+            // Çift tırnak (") kullanarak değişkeni içeri gömüyoruz.
+            // Bu syntax artık "Bad substitution" hatası vermez.
+            sh "docker run --rm --shm-size=2g -v ${WORKSPACE}/target:/app/target -e CUCUMBER_FILTER_TAGS='${tags}' patimo-automation"
+        }
       }
     }
   }
