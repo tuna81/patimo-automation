@@ -43,6 +43,16 @@ public class PatimoSteps {
         selectedProductName = productDetailPage.getProductName();
     }
 
+    @When("kullanici {string} urununu secer")
+    public void kullaniciBelirliUrunuSecer(String productName) {
+        if (productsPage == null) {
+            productsPage = new ProductsPage(DriverFactory.getDriver());
+        }
+        productsPage.openProductByName(productName);
+        productDetailPage = new ProductDetailPage(DriverFactory.getDriver());
+        selectedProductName = productDetailPage.getProductName();
+    }
+
     @When("kullanici urunu sepete ekler")
     public void kullaniciUrunuSepeteEkler() {
         if (productDetailPage == null) {

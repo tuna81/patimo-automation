@@ -27,9 +27,16 @@ Chromium ve chromedriver Dockerfile içerisinde kuruludur. `-e headless=false` i
 Repo kökündeki `Jenkinsfile` üç aşamalı bir pipeline tanımlar:
 1. Checkout
 2. Docker imajını build et (`docker build -t patimo-automation .`)
-3. Testleri konteynerda çalıştır (`docker run --rm --shm-size=2g patimo-automation`)
+3. Testleri konteynerda çalıştır (`docker run --rm --shm-size=2g -e CUCUMBER_FILTER_TAGS="${params.TAG_EXPRESSION}" patimo-automation`)
 
-Post adımı imajı siler. Jenkins container’ının host Docker soketine erişimi için `/var/run/docker.sock` ve Docker CLI bind edilmelidir.
+`TAG_EXPRESSION` parametresi varsayılan olarak `not @ignore` değerindedir ve Jenkins UI üzerinden değiştirilebilir (örn. sadece `@smoke` tag’li senaryoları koşmak için). Post adımı imajı siler. Jenkins container’ının host Docker soketine erişimi için `/var/run/docker.sock` ve Docker CLI bind edilmelidir.
+
+### Cucumber tagleri
+- `@cart`: Sepet akışı senaryoları (tüm senaryolar)
+- `@smoke`: Hızlı kontrol (Kedi kumu küreği ürünü)
+- `@regression`: Diğer ürün senaryosu
+
+Filtreleme için: `mvn test -Dcucumber.filter.tags="@smoke"` veya Docker/Jenkins parametresi kullanılabilir.
 
 ## Yapı
 - `src/test/resources/features`: Cucumber senaryoları

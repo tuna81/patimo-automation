@@ -41,4 +41,4 @@ COPY pom.xml .
 COPY src ./src
 
 # 4. Adım: Testi Başlat
-ENTRYPOINT ["mvn", "test"]
+ENTRYPOINT ["sh", "-c", "mvn test -Dcucumber.filter.tags=\"${CUCUMBER_FILTER_TAGS:-not @ignore}\""]
