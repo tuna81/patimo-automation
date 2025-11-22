@@ -1,6 +1,11 @@
 pipeline {
   agent any
 
+  triggers {
+        // Her 2 dakikada bir GitHub'ı kontrol et
+        pollSCM('H/2 * * * *') 
+    }
+
   stages {
     stage('Checkout') {
       steps {
