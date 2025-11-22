@@ -21,7 +21,10 @@ pipeline {
 
     stage('Run Tests') {
       steps {
-        sh 'docker run --rm --shm-size=2g patimo-automation'
+        // -v $WORKSPACE/target:/app/target
+        // ANLAMI: Benim bilgisayarımdaki (Jenkins) "target" klasörünü,
+        // Konteynerin içindeki "/app/target" klasörüne eşitle.
+        sh 'docker run --rm --shm-size=2g -v $WORKSPACE/target:/app/target patimo-automation'
       }
     }
   }
@@ -29,6 +32,7 @@ pipeline {
   post {
     always {
       sh 'docker rmi patimo-automation || true'
+      archiveArtifacts artifacts: 'target/**/*.html', allowEmptyArchive: true
     }
   }
 }
