@@ -9,6 +9,7 @@ pipeline {
   triggers {
     // Her 2 dakikada bir GitHub'ı kontrol et
     pollSCM('H/2 * * * *') 
+    cron('H 2 * * *')
   }
 
   stages {
